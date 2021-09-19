@@ -1,4 +1,6 @@
-# Super-Shop-ManagementA simple super shop management project created with java. IDE: IntelliJ
+# Super-Shop-Management
+A simple super shop management project created with java. 
+IDE: IntelliJ
 
 I created this project only to practice. 
 But I tried to make the codes easily redable, reuseable and changeable. 
