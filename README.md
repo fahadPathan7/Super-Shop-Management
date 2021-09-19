@@ -17,5 +17,5 @@ Others are used to control that type (file name is written as type) of products.
 How to run:
 clone/ download zip.
 open the whole project (folder: Super-Shop-Management-main) on Intellij.
-opne Main.java ( src/com.company ).
+open Main.java ( src/com.company ).
 press Ctrl + Shift + F10.
