@@ -34,7 +34,7 @@ public class Products {
         System.out.println("\nNotice:\ntype 1 to 5 for buying products.\ntype -1 to exit.\n");
 
         System.out.print("Enter your choice: ");
-        choice = sc.next();
+        choice = sc.nextLine();
 
         processChoice();
     }

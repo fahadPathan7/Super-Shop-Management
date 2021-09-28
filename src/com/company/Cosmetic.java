@@ -58,10 +58,12 @@ public class Cosmetic {
     void processChoice() {
         if (isWithinRange(choice)) {
             // to take item's count
-            double count = 0.0; // as all the items are counted as piece
+            double count = 0.0;
             System.out.print("Enter how much/ how many you want: ");
             try {
-                count = sc.nextDouble();
+                String str = sc.nextLine(); // to avoid unnecessary input
+                count = Double.parseDouble(str);
+
                 if (count <= 0.0) {
                     System.out.println(UserControl.RED + "\nPlease enter a positive value." + UserControl.RESET);
                     itemsType();
@@ -69,7 +71,6 @@ public class Cosmetic {
             } catch (Exception e) {
                 System.out.println(UserControl.RED + "\nInvalid input! Please try again." + UserControl.RESET);
 
-                sc.next(); // to avoid unnecessary input
                 itemsType();
             }
 
