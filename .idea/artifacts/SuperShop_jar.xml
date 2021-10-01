@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SuperShop:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SuperShop_jar</output-path>
+    <root id="archive" name="SuperShop.jar">
+      <element id="module-output" name="SuperShop" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/jarFiles/javax.mail.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/jarFiles/javax.activation.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

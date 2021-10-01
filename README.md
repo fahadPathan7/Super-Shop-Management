@@ -1,21 +1,30 @@
 # Super-Shop-Management
-A simple super shop management project created with java. 
-IDE: IntelliJ
+A simple super shop management project created with java.
 
-I created this project only to practice. 
-But I tried to make the codes easily readable, reuseable and changeable. 
-I used File class to handle login information (id and pass) and creating memo for particular user. 
-I marked where the codes should change to add or remove some products in the future.
+I created this project only to practice.
+But I tried to make the codes easily readable, reusable and changeable.
 
 java files are here ( src/com/company ).
 
-Main.java is used to run the project. 
-UserControl.java is used to work with user and file (login info and memo). 
-Products.java is used to control the products of the super shop. 
-Others are used to control that type (file name is written as type) of products.
+use of classes:
+1. Main.java is used to run the project.
+2. UserControl.java is used to work with user and file (login info and memo).
+3. Mail.java is used to send password for new users and for password recovery.
+4. Products.java is used to control the products of the super shop.
+5. Others are used to control that type (file name is written as type) of products.
 
 How to run:
-clone/ download zip.
-open the whole project (folder: Super-Shop-Management-main) on Intellij.
-open Main.java ( src/com.company ).
-press Ctrl + Shift + F10.
+(on cmd)
+1. download zip
+2. run SuperShop.jar on cmd (loc: SuperShop\out\artifacts\SuperShop_jar\SuperShop.jar)
+   (command: java -jar location_of_SuperShop.jar_on_your_pc)
+
+(on IntelliJ)
+1. clone/ download zip.
+2. open the project (folder: Super-Shop-Management-main) on Intellij.
+3. select your jdk
+4. press Ctrl+Alt+Shift+S
+5. select libraries > click on '+' icon (middle column) > select Java > select jarFiles (folder) >
+   click ok > click ok > click apply
+6. open Main.java file ( src\com.company\Main )
+7. press Alt+Shift+F10 and wait few seconds.

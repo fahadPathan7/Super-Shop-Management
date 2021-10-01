@@ -10,62 +10,82 @@ package com.company;
 import java.util.Scanner;
 
 public class Grocery {
-    Scanner sc = new Scanner(System.in); // to take user input
-    String choice; // to input user's choice
-    static double costs = 0.0; // to store user's cost on Grocery products
+    //! change here for adding or removing products. (only here)
+    // item_name>unit>price_per_unit>is_fraction_amount_allowed
+    // example: Rice per kg is 0.8$ and fraction amount is possible. so it will be, Rice>Kg>0.8>Y
+    String[] items = {"Rice>Kg>0.75>Y", "Oil>Liter>1.5>Y", "Salt>Kg>0.25>Y", "Milk>Liter>1>Y", "Egg>Dozen>1.4>N"};
 
-    // constructor
+    Scanner sc = new Scanner(System.in);
+    String choice; // to take user's choice
+    static double costs = 0.0; // to store user's expenses
+
     Grocery() {
         itemsType();
     }
 
-    // to show items and taking user's choice
+    // to show items to user
     void itemsType() {
         System.out.println("\nGrocery Items:");
 
-        //* change here for updating products
-        System.out.println("1. Rice (Kg)    - 0.75$");
-        System.out.println("2. Oil (Liter)  - 1.5$");
-        System.out.println("3. Salt (Kg)    - 0.25$");
-        System.out.println("4. Milk (Liter) - 1$");
-        System.out.println("5. Egg (Dozen)  - 1.4$");
+        // to show name, unit and price for each product
+        for (int i = 1; i <= items.length; i++) {
+            String[] temp = items[i - 1].split(">");
 
-        //* change here for updating products
-        System.out.println("\nNotice:\ntype 1 to 5 for buying products.\ntype 0 to go to Home page.\ntype -1 to exit.\n");
+            System.out.print(i + ". " + temp[0] + " (" + temp[1] + ") ");
+            for (int j = 0; j < UserControl.space - temp[0].length() - temp[1].length(); j++) {
+                System.out.print(' ');
+            }
+            System.out.println("- " + temp[2] + "$");
+        }
 
+        // to show user what to input
+        System.out.println("\nNotice:\ntype 1 to " + items.length + " for buying products." +
+                "\ntype 0 to go to Home page.\ntype -1 to exit.\n\r");
+
+        // taking user's choice
         System.out.print("Enter your choice: ");
-        choice = sc.next();
+        choice = sc.nextLine();
 
+        // doing action according to user's choice
         processChoice();
     }
 
-    // checking if the choice is valid for buying products
+    // to check if the choice is ok to buy products
     public boolean isWithinRange(String str) {
         boolean check = true;
         try {
             Integer x = Integer.parseInt(str);
 
-            //* change here for updating products
-            if (x >= 1 && x <= 5) check = true;
+            if (x >= 1 && x <= items.length) check = true;
             else check = false;
         } catch(Exception e) {
             check = false;
         }
+
         return check;
     }
 
-    // to take action according to user's choice
+    // processing user's choice
     void processChoice() {
         if (isWithinRange(choice)) {
-            // to take item's count
+            String[] temp = items[Integer.parseInt(choice) - 1].split(">");
+
+            // taking input of amount/ count
             double count = 0.0;
             System.out.print("Enter how much/ how many you want: ");
             try {
-                String str = sc.nextLine(); // to avoid unnecessary input
+                String str = sc.nextLine(); // nextLine is used to avoid unnecessary input
                 count = Double.parseDouble(str);
 
                 if (count <= 0.0) {
                     System.out.println(UserControl.RED + "\nPlease enter a positive value." + UserControl.RESET);
+
+                    itemsType();
+                }
+                else if (temp[3].equalsIgnoreCase("N") && count > (long)count) {
+                    System.out.println(UserControl.RED + "\nFraction amount is not possible for this item!\nPlease try again."
+                            + UserControl.RESET);
+
                     itemsType();
                 }
             } catch (Exception e) {
@@ -74,38 +94,11 @@ public class Grocery {
                 itemsType();
             }
 
-            long x = (long)count; // to check for fraction value
+            // calculating cost according to choice and amount/ count
+            costs += (Double.parseDouble(temp[2]) * count);
+            UserControl.memo(temp[0], temp[1], Double.parseDouble(temp[2]), count);
 
-            //* change here for updating products
-            // matching choice of items
-            if (choice.equals("1")) {
-                costs += (0.75 * count);
-                UserControl.memo("Rice>(Kg)", 0.75, count);
-            }
-            else if (choice.equals("2")) {
-                costs += (1.5 * count);
-                UserControl.memo("Oil>(Liter)", 1.5, count);
-            }
-            else if (choice.equals("3")) {
-                costs += (0.25 * count);
-                UserControl.memo("Salt>(Kg)", 0.25, count);
-            }
-            else if (choice.equals("4")) {
-                costs += (1 * count);
-                UserControl.memo("Milk>(Liter)", 1, count);
-            }
-            else if (choice.equals("5")) {
-                if (x == 0) {
-                    System.out.println(UserControl.RED + "\nPlease enter valid amount (amount >= 1)." + UserControl.RESET);
-                    itemsType();
-                    return;
-                }
-                if (count > (double)x) Products.fractionErrorMessage();
-                costs += (1.4 * Math.floor(count));
-                UserControl.memo("Egg>(Dozen)", 1.4, Math.floor(count));
-            }
-
-            // asking the user if he wants more
+            // asking the user if he/she wants more
             System.out.println("\nWant more grocery?");
             itemsType();
         }
@@ -119,6 +112,7 @@ public class Grocery {
         }
         else {
             System.out.println(UserControl.RED + "\nInvalid input. Please try again." + UserControl.RESET);
+
             itemsType();
         }
     }

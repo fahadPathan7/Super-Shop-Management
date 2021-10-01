@@ -8,6 +8,7 @@ Main use of this class:
 
 Extra use:
 1. to create directory in E drive
+2. to control spacing on output
 */
 
 package com.company;
@@ -16,14 +17,15 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 
 public class UserControl {
     Scanner sc = new Scanner(System.in); // to take user input
     static String id, pass; // to take and store user id and pass
     static double totalCost = 0.0; // for calculating total cost of user
     static int productCount = 0; // storing bought product types count of the user
+    static int space = 18, nameSpace = 18, unitSpace = 8, costSpace = 14,
+            countSpace = 13, productCountSpace = 5; // to control spacing on output
     static DecimalFormat df = new DecimalFormat("0.000"); // to format cost
 
     //colors
@@ -85,12 +87,10 @@ public class UserControl {
         boolean idFound = false, passFound = false; // to check if the id and pass match
         sc = new Scanner(System.in);
 
-        // taking user id and pass.
+        // taking user id
         System.out.println("Login Form:");
         System.out.print("Please enter your id: ");
         id = sc.nextLine();
-        System.out.print("Please enter your pass: ");
-        pass = sc.nextLine();
 
         try {
             // opening file and reading previously saved information
@@ -103,27 +103,39 @@ public class UserControl {
 
                 if (id.equals(sTemp1[0])) {
                     idFound = true;
+
+                    // taking password
+                    System.out.print("Please enter your pass: ");
+                    Scanner sc1 = new Scanner(System.in); // temporary scanner
+                    pass = sc1.nextLine();
+
                     if (pass.equals(sTemp1[1])) {
                         passFound = true;
                         System.out.println(GREEN + "\nLogin Successful." + RESET);
                     }
+                    pass = sTemp1[1];
                     break;
                 }
             }
             sc.close();
         } catch (Exception e) {
-            System.out.println(RED + "Something went wrong. Login failed!" + RESET);
+            System.out.println(RED + "\nSomething went wrong. Login failed!" + RESET);
         }
 
         // if the id and pass do not match
         if (!idFound) {
             System.out.println(RED + "\nId does not exist! Please register.\n" + RESET);
             welcomeMessage();
-        }
-        else if (!passFound) {
-            System.out.println(RED + "\nPlease enter correct password.\n" + RESET);
-            welcomeMessage();
+        } else if (!passFound) {
+            System.out.println(RED + "\nWrong Password!\n" + RESET);
+            //welcomeMessage();
             //todo: create a section to reset password. (using email)
+            try {
+                Mail.email();
+            } catch (Exception e) {
+            }
+
+            welcomeMessage();
         }
     }
 
@@ -159,48 +171,48 @@ public class UserControl {
 
         // taking new id and pass
         System.out.println("Registration Form:");
-        System.out.print("Please enter your new id: ");
+        System.out.print("Please enter your email id: ");
         id = sc.nextLine();
-
-        // check if greater than sign exists in id
-        if (id.contains(">")) {
-            System.out.println(RED + "\nGreater than sign (>) is not allowed to use in id or pass. Please try again.\n" + RESET);
-            welcomeMessage();
-            return;
-        }
 
         // verifying id
         if (!verify()) {
             System.out.println(RED + "\nId already exists! Please try again.\n" + RESET);
             welcomeMessage();
-        } else {
-            sc = new Scanner(System.in);
-            System.out.print("Please enter your new pass: ");
-            pass = sc.nextLine();
-
-            // check if greater than sign exists in pass
-            if (pass.contains(">")) {
-                System.out.println(RED + "\nGreater than sign (>) is not allowed to use in id or pass. Please try again.\n" + RESET);
-                welcomeMessage();
-                return;
-            }
-
-            // writing on file for further use of that id and pass
-            try {
-                FileWriter write = new FileWriter("E:/Super Shop Management/User info/login.txt", true);
-                BufferedWriter b = new BufferedWriter(write);
-                b.write(id + ">" + pass);
-                b.newLine();
-
-                System.out.println(GREEN + "\nRegistration Successful." + RESET);
-
-                b.close();
-                write.close();
-            } catch (Exception e) {
-                System.out.println(RED + "\nSomething went wrong. Registration failed! Try again.\n" + RESET);
-                regForm();
-            }
         }
+
+        // creating and sending new password
+        System.out.println("\nPlease wait...\nYour password will be sent to your email.\n");
+        Random rand = new Random();
+        long temp = rand.nextLong(1000000) + 1000; // creating a random password
+        setPass(temp);
+        Mail.emailRecipient = id;
+        Mail.sendEmail(); // sending password via email
+
+        if (!Mail.sent) {
+            welcomeMessage();
+        }
+
+        // writing on file for further use of that id and pass
+        try {
+            FileWriter write = new FileWriter("E:/Super Shop Management/User info/login.txt", true);
+            BufferedWriter b = new BufferedWriter(write);
+            b.write(id + ">" + pass);
+            b.newLine();
+
+            System.out.println(GREEN + "Registration Successful.\n" +
+                    "Please remember Password." + RESET);
+
+            b.close();
+            write.close();
+        } catch (Exception e) {
+            System.out.println(RED + "\nSomething went wrong. Registration failed! Try again.\n" + RESET);
+            regForm();
+        }
+    }
+
+    // to set new password
+    static void setPass(long temp) {
+        pass = Long.toString(temp);
     }
 
     // creating directory and file for memo
@@ -234,22 +246,32 @@ public class UserControl {
     }
 
     // writing on user memo
-    public static void memo(String name, double cost, double count) {
+    public static void memo(String name, String unit, double cost, double count) {
         productCount++;
-        String[] temp = name.split(">");
 
         try {
             FileWriter writeMemo = new FileWriter("E:/Super Shop Management/Memo/" + id + ".txt", true);
             BufferedWriter b = new BufferedWriter(writeMemo);
 
-            b.write(productCount + ". " + "Item name: " + temp[0] + ", Cost " + temp[1] + " : " + cost + "$, Amount/ Count: " + count + ", Total: " + df.format(cost * count) + "$");
+            b.write(productCount + ".");
+            for (int i = 0; i < productCountSpace - Integer.toString(productCount).length(); i++) b.write(' ');
+            b.write("Item name: " + name);
+            for (int i = 0; i < nameSpace - name.length(); i++) b.write(' ');
+            b.write("Cost (per " + unit + ")");
+            for (int i = 0; i < unitSpace - unit.length(); i++) b.write(' ');
+            b.write(" : " + cost + "$");
+            for (int i = 0; i < costSpace - Double.toString(cost).length(); i++) b.write(' ');
+            b.write("Amount/ Count: " + count);
+            for (int i = 0; i < countSpace - Double.toString(count).length(); i++) b.write(' ');
+            b.write("Total: " + df.format(cost * count) + "$");
             b.newLine();
 
             b.close();
             writeMemo.close();
 
             // showing user what he has bought.
-            System.out.println(GREEN + "\nSuccessfully bought:\n" + "Item name: " + temp[0] + ", Amount/ Count: " + count + " " + temp[1] + RESET);
+            System.out.println(GREEN + "\nSuccessfully bought:\n" + "Item name: " + name + ", Amount/ Count: " + count +
+                    " (" + unit + ")" + RESET);
         } catch (Exception e) {
             System.out.println(RED + "\nSomething went wrong while Writing on memo file!\n" + RESET);
         }
@@ -263,7 +285,8 @@ public class UserControl {
 
         // writing total cost on memo file
         try {
-            FileWriter writeMemo = new FileWriter("E:/Super Shop Management/memo/" + UserControl.id + ".txt", true);
+            FileWriter writeMemo = new FileWriter("E:/Super Shop Management/memo/" +
+                    UserControl.id + ".txt", true);
             BufferedWriter b = new BufferedWriter(writeMemo);
 
             b.write("\nTotal cost: " + df.format(totalCost) + "$\n\n\n\n");
