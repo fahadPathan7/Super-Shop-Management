@@ -16,7 +16,7 @@ use of classes:
 How to run:
 (on cmd)
 1. download zip
-2. run SuperShop.jar on cmd (loc: SuperShop\out\artifacts\SuperShop_jar\SuperShop.jar)
+2. run SuperShop.jar on cmd (loc: out\artifacts\SuperShop_jar\SuperShop.jar)
    (command: java -jar location_of_SuperShop.jar_on_your_pc)
 
 (on IntelliJ)
