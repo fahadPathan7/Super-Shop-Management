@@ -1,10 +1,8 @@
 # Super-Shop-Management
-A simple super shop management project created with java.
+A simple super shop management project.
 
-I created this project only to practice.
+I created this project to practice.
 But I tried to make the codes easily readable, reusable and changeable.
-
-java files are here ( src/com/company ).
 
 use of classes:
 1. Main.java is used to run the project.
