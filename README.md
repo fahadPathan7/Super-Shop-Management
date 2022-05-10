@@ -13,16 +13,4 @@ use of classes:
 
 How to run:
 (on cmd)
-1. download zip
-2. run SuperShop.jar on cmd (loc: out\artifacts\SuperShop_jar\SuperShop.jar)
-   (command: java -jar location_of_SuperShop.jar_on_your_pc)
-
-(on IntelliJ)
-1. clone/ download zip.
-2. open the project (folder: Super-Shop-Management-main) on Intellij.
-3. select your jdk
-4. press Ctrl+Alt+Shift+S
-5. select libraries > click on '+' icon (middle column) > select Java > select jarFiles (folder) >
-   click ok > click ok > click apply
-6. open Main.java file ( src\com.company\Main )
-7. press Alt+Shift+F10 and wait few seconds.
+1. run SuperShop.jar on cmd
